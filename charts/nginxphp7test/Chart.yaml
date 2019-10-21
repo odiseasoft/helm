@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Nginx, PHP-FPM, Ingress, SSL
+name: osphp7nginx
+version: 1.0

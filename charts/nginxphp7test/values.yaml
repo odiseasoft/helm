@@ -1,0 +1,97 @@
+### CONTAINERS ###
+php:
+  ## php.repository default php image
+  repository: "chialab/php"
+
+  ## php.tag default php image tag
+  tag: "7.2-fpm"
+
+  ## php.pullPolicy Image pull policy
+  pullPolicy: IfNotPresent
+
+  requests:
+    cpu: "100m"
+    memory: "64Mi"
+  limits:
+    cpu: "125m"
+    memory: "128Mi"
+    
+nginx:
+  ## nginx.repository default nginx image
+  repository: "nginx"
+
+  ## nginx.tag default nginx image tag
+  tag: "1.14.2"
+  
+  ## nginx.pullPolicy Image pull policy
+  pullPolicy: IfNotPresent
+  
+  ## httpd.resources nginx container resource requests/limits
+  requests:
+    cpu: "100m"
+    memory: "64Mi"
+  limits:
+    cpu: "125m"
+    memory: "128Mi"
+
+
+### STORAGE ###
+
+persistence:
+  ## persistence.enabled Enables persistent volume - PV provisioner support necessary
+  enabled: true
+
+  ## persistence.keep Keep persistent volume after helm delete
+  keep: true
+
+  ## persistence.accessMode PVC Access Mode
+  accessMode: ReadWriteOnce
+
+  ## persistence.size PVC Size
+  size: 1Gi
+
+  ## persistence.storageClass PVC Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+
+  ## persistence.mountPath
+  mountPath: /var/www/html/storage/app
+
+
+### NETWORKING ###
+service:
+  ## service.HTTPPort Port to advertise the main web service in LoadBalancer mode
+  HTTPPort: 80
+  
+ingress:
+  ## ingress.enabled Enables ingress support - working ingress controller necessary
+  enabled: true
+
+  ## ingress.domain domain to advertise the services - A records need to point to
+  ## ingress controllers IP
+  domain: "test.stdhosting.com"
+
+  ## ingress.ssl Enables [lego](https://github.com/jetstack/kube-lego) letsencrypt
+  ## ssl support - working lego container necessary
+  ## > NOTE: Requires nginx ingress controller
+  ssl: false
+
+  ## ingress.annotations specify custom ingress annotations such as e.g.
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: "50m"
+
+### NFS Server Repo ###
+repo:
+    server: 190.124.168.41
+    path: /mnt/global-02/test
+    zip: benchmark.zip
+    root: /var/www/html
+    laravel: false
+    
+### OTHER ###
+replicaCount: 1
