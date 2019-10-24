@@ -93,5 +93,12 @@ repo:
     root: /var/www/html
     laravel: false
     
+env:
+    mysqlhost: db.stdhosting.com
+    mysqlport: 3306
+    mysqldbnm: db
+    mysqluser: test
+    mysqlpass: test   
+    
 ### OTHER ###
 replicaCount: 1
