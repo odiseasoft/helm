@@ -122,6 +122,16 @@ spec:
             value: "false"
           - name: APP_URL
             value: "{{- if .Values.ingress.ssl -}}https{{- else -}}http{{- end -}}://{{ template "lamp.domain" . }}"
+          - name: DB_HOST
+            value: {{ .Values.env.mysqlhost }}
+          - name: DB_PORT
+            value: {{ .Values.env.mysqlport }}
+          - name: DB_DATABASE
+            value: {{ .Values.env.mysqldbnm }}
+          - name: DB_USERNAME
+            value: {{ .Values.env.mysqluser }}
+          - name: DB_PASSWORD
+            value: {{ .Values.env.mysqlpass }}
           resources:
             requests:
               memory: {{ .Values.php.requests.memory }}
