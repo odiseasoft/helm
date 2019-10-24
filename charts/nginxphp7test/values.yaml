@@ -87,8 +87,8 @@ ingress:
 
 ### NFS Server Repo ###
 repo:
-    server: 190.124.168.41
-    path: /mnt/global-02/test
+    server: 190.124.168.40
+    path: /mnt/global-01/cluster01/repo
     zip: benchmark.zip
     root: /var/www/html
     laravel: false
