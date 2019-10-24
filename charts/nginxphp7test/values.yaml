@@ -95,7 +95,7 @@ repo:
     
 env:
     mysqlhost: db.stdhosting.com
-    mysqlport: "3306"
+    mysqlport: 3306
     mysqldbnm: db
     mysqluser: test
     mysqlpass: test   
