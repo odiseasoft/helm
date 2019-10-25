@@ -6,55 +6,50 @@ metadata:
     tier: backend
 data:
   config : |
-    events {
-      worker_connections 4000;
-    }
-    http {
-      worker_processes auto;
-      limit_req_zone $request_uri zone=credentials_uri:10m rate=60r/m;
-      limit_conn_zone $binary_remote_addr zone=addr:10m;
-      server {
-        limit_conn addr 10
+    worker_processes auto;
+    limit_req_zone $request_uri zone=credentials_uri:10m rate=60r/m;
+    limit_conn_zone $binary_remote_addr zone=addr:10m;
+    server {
+      limit_conn addr 10
+    
+      listen 80;
+      server_name {{ template "lamp.domain" . }};      
       
-        listen 80;
-        server_name {{ template "lamp.domain" . }};      
-        
-        add_header X-Frame-Options "SAMEORIGIN";
-        add_header X-XSS-Protection "1; mode=block";
-        add_header X-Content-Type-Options "nosniff";
-        
-        index index.php index.html;
-        error_log  /var/log/nginx/error.log;
-        access_log /var/log/nginx/access.log;
-        
-        root {{ .Values.repo.root }};
-        
-        charset utf-8;
-        
-        location / {
-            limit_req zone=credentials_uri burst=60 nodelay;
-            try_files $uri $uri/ /index.php?$query_string;
-            set $redirect_url $uri;
-        }
-        location = /favicon.ico { access_log off; log_not_found off; }
-        location = /robots.txt  { access_log off; log_not_found off; }
-        
-        error_page 404 /index.php;
-        
-        location ~ .php$ {
-            try_files $uri =404;
-            fastcgi_split_path_info ^(.+.php)(/.+)$;
-            fastcgi_pass 127.0.0.1:9000;
-            fastcgi_index index.php;
-            include fastcgi_params;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-            fastcgi_param PATH_INFO $fastcgi_path_info;
-            fastcgi_param REDIRECT_URL $redirect_url;
-        }
-        
-        location ~ /\.(?!well-known).* {
-            deny all;
-        }
+      add_header X-Frame-Options "SAMEORIGIN";
+      add_header X-XSS-Protection "1; mode=block";
+      add_header X-Content-Type-Options "nosniff";
+      
+      index index.php index.html;
+      error_log  /var/log/nginx/error.log;
+      access_log /var/log/nginx/access.log;
+      
+      root {{ .Values.repo.root }};
+      
+      charset utf-8;
+      
+      location / {
+          limit_req zone=credentials_uri burst=60 nodelay;
+          try_files $uri $uri/ /index.php?$query_string;
+          set $redirect_url $uri;
+      }
+      location = /favicon.ico { access_log off; log_not_found off; }
+      location = /robots.txt  { access_log off; log_not_found off; }
+      
+      error_page 404 /index.php;
+      
+      location ~ .php$ {
+          try_files $uri =404;
+          fastcgi_split_path_info ^(.+.php)(/.+)$;
+          fastcgi_pass 127.0.0.1:9000;
+          fastcgi_index index.php;
+          include fastcgi_params;
+          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+          fastcgi_param PATH_INFO $fastcgi_path_info;
+          fastcgi_param REDIRECT_URL $redirect_url;
+      }
+      
+      location ~ /\.(?!well-known).* {
+          deny all;
       }
     }
 ---
