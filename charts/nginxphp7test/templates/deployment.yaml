@@ -6,8 +6,9 @@ metadata:
     tier: backend
 data:
   config : |
+    
     limit_req_zone $binary_remote_addr zone=one:10m rate=1r/s;
-    limit_conn_zone $binary_remote_address zone=addr:10m;
+    limit_conn_zone $binary_remote_addr zone=addr:10m;
     server {
       limit_conn servers 100;
     
