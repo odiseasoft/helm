@@ -6,7 +6,6 @@ metadata:
     tier: backend
 data:
   config : |
-    worker_processes auto;
     limit_req_zone $request_uri zone=credentials_uri:10m rate=60r/m;
     limit_conn_zone $binary_remote_addr zone=addr:10m;
     server {
