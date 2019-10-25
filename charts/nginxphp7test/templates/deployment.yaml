@@ -7,10 +7,10 @@ metadata:
 data:
   config : |
     
-    limit_req_zone $binary_remote_addr zone=one:10m rate=300r/s;
+    limit_req_zone $binary_remote_addr zone=one:10m rate=30r/s;
     limit_conn_zone $binary_remote_addr zone=addr:10m;
     server {
-      limit_conn addr 300;
+      limit_conn addr 30;
     
       listen 80;
       server_name {{ template "lamp.domain" . }};      
@@ -28,7 +28,7 @@ data:
       charset utf-8;
       
       location / {
-          limit_req zone=one burst=20;
+          limit_req zone=one burst=30 delay=15;
           try_files $uri $uri/ /index.php?$query_string;
           set $redirect_url $uri;
       }
@@ -38,7 +38,6 @@ data:
       error_page 404 /index.php;
       
       location ~ .php$ {
-          limit_req zone=one burst=20;
           try_files $uri =404;
           fastcgi_split_path_info ^(.+.php)(/.+)$;
           fastcgi_pass 127.0.0.1:9000;
