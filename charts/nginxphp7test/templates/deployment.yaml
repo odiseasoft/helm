@@ -28,7 +28,7 @@ data:
       charset utf-8;
       
       location / {
-          limit_req zone=one burst=30 delay=15;
+          limit_req zone=one burst=30 nodelay;
           try_files $uri $uri/ /index.php?$query_string;
           set $redirect_url $uri;
       }
