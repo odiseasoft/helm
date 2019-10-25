@@ -6,11 +6,10 @@ metadata:
     tier: backend
 data:
   config : |
-    
-    limit_req_zone $binary_remote_addr zone=one:10m rate=30r/s;
+    limit_req_zone $request_uri zone=credentials_uri:10m rate=60r/m;
     limit_conn_zone $binary_remote_addr zone=addr:10m;
     server {
-      limit_conn addr 30;
+      limit_conn addr 60;
     
       listen 80;
       server_name {{ template "lamp.domain" . }};      
@@ -28,7 +27,7 @@ data:
       charset utf-8;
       
       location / {
-          limit_req zone=one burst=30 nodelay;
+          limit_req zone=credentials_uri burst=60 nodelay;
           try_files $uri $uri/ /index.php?$query_string;
           set $redirect_url $uri;
       }
