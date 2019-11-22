@@ -55,6 +55,18 @@ data:
     }
 ---
 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "lamp.fullname" . }}-php-config
+  labels:
+    tier: backend
+data:
+  config : |
+    upload_max_filesize = 100M
+    post_max_size = 600M
+---
+
 {{- if .Values.persistence.enabled}}
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -117,15 +129,22 @@ spec:
             items:
             - key: config
               path: site.conf
+        # Add the ConfigMap we declared above as a volume for the pod
+        - name: configphp
+          configMap:
+            name: {{ template "lamp.fullname" . }}-php-config
+            items:
+            - key: configphp
+              path: postsize.ini
       containers:
         - image: "{{ .Values.php.repository }}:{{ .Values.php.tag }}"
           name: php-app
           imagePullPolicy: {{ .Values.php.pullPolicy }}
           env:
           - name: APP_ENV
-            value: "local"
+            value: "production"
           - name: APP_DEBUG
-            value: "true"
+            value: "false"
           - name: APP_URL
             value: "{{- if .Values.ingress.ssl -}}https{{- else -}}http{{- end -}}://{{ template "lamp.domain" . }}"
           - name: DB_HOST
@@ -152,6 +171,8 @@ spec:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
             {{- end}}
+            - name: configphp
+              mountPath: /usr/local/etc/php/conf.d
           # permissions fix at /var/www/html.
           lifecycle:
             postStart:
