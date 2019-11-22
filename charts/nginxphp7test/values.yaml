@@ -84,6 +84,7 @@ ingress:
   ## ingress.annotations specify custom ingress annotations such as e.g.
   annotations:
     ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
 
 ### NFS Server Repo ###
 repo:
