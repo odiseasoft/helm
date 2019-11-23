@@ -134,7 +134,7 @@ spec:
           configMap:
             name: {{ template "lamp.fullname" . }}-php-config
             items:
-            - key: configphp
+            - key: config
               path: postsize.ini
       containers:
         - image: "{{ .Values.php.repository }}:{{ .Values.php.tag }}"
