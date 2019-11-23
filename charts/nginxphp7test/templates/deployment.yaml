@@ -172,7 +172,8 @@ spec:
               mountPath: {{ .Values.persistence.mountPath }}
             {{- end}}
             - name: configphp
-              mountPath: /usr/local/etc/php/conf.d/postsize.ini
+              mountPath: /usr/local/etc/php/conf.d
+              subPath: postsize.ini
           # permissions fix at /var/www/html.
           lifecycle:
             postStart:
